@@ -7,7 +7,7 @@ class MarkovChain {
         this.minOrder = options?.minOrder ?? 1;
         this.nextOrder = options?.nextOrder ?? 3;
         this.stepDown = options?.stepDown ?? 1;
-        this.stopCharacters = options?.stopCharacters ?? [".", "!", "?"];
+        this.stopCharacters = options?.stopCharacters ?? [".", "!", "?", "  "];
     }
 
     *getNgrams(text, order, nextOrder) {
@@ -49,13 +49,13 @@ class MarkovChain {
         }
         return this.predictNext(text, order - this.stepDown);
     }
-    
+
     predictUntil(text, stopArray = this.stopCharacters) {
         var result = text;
         while (true) {
             var prediction = this.predictNext(result);
             if (!prediction) break;
-            
+
             var stop = false;
             for (var letter of prediction) {
                 result += letter;
@@ -124,21 +124,19 @@ inputForm.addEventListener('submit', (event) => {
 
         setTimeout(() => {
             const botResponse = markovChain.predictUntil(messageText.toLowerCase());
-            console.log(botResponse);
             addMessage(messageText + (botResponse), 'bot');
         });
     }
 });
 
 
-document.addEventListener('DOMContentLoaded', async () => {
-    markovChain = await loadModel();
-
-    if (markovChain) {
+document.addEventListener('DOMContentLoaded', () => {
+    loadModel().then(function (x) {
+        markovChain = x;
         statusDisplay.textContent = 'Model loaded successfully!';
         userInput.disabled = false;
         sendButton.disabled = false;
         userInput.placeholder = "Type your message...";
         addMessage("Hello! I'm a chatbot powered by a Markov Chain. I will autocomplete your text!", "bot");
-    }
+    });
 });
