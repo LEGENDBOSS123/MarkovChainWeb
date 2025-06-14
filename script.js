@@ -1,4 +1,3 @@
-// This formatter is not used in the chat UI but kept from the original class
 var formatter = new Intl.NumberFormat("en-US");
 
 class MarkovChain {
@@ -11,7 +10,6 @@ class MarkovChain {
         this.stopCharacters = options?.stopCharacters ?? [".", "!", "?"];
     }
 
-    // No changes needed for the core Markov Chain methods
     *getNgrams(text, order, nextOrder) {
         for (let i = 0; i < text.length - order - nextOrder + 1; i += Math.max(1, Math.floor(nextOrder))) {
             yield [text.substring(i, i + order), text.substring(i + order, i + order + nextOrder)];
@@ -68,7 +66,6 @@ class MarkovChain {
             }
             if (stop) break;
         }
-        // Return only the generated part
         return result.substring(text.length);
     }
 
@@ -85,11 +82,6 @@ class MarkovChain {
 }
 
 
-/**
- * NEW CODE for the web demo
- */
-
-// Get references to DOM elements
 const messageWindow = document.getElementById('message-window');
 const inputForm = document.getElementById('input-form');
 const userInput = document.getElementById('user-input');
@@ -98,10 +90,6 @@ const statusDisplay = document.getElementById('status');
 
 let markovChain;
 
-/**
- * Fetches the Markov Chain model from the 'model.json' file on the server.
- * This replaces the old file picker function.
- */
 async function loadModel() {
     try {
         const response = await fetch('model.json');
@@ -118,17 +106,14 @@ async function loadModel() {
     }
 }
 
-// Function to add a message to the chat window
 function addMessage(text, sender) {
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', `${sender}-message`);
     messageElement.textContent = text;
     messageWindow.appendChild(messageElement);
-    // Scroll to the latest message
     messageWindow.scrollTop = messageWindow.scrollHeight;
 }
 
-// Handle form submission
 inputForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const messageText = userInput.value.trim();
@@ -137,17 +122,15 @@ inputForm.addEventListener('submit', (event) => {
         addMessage(messageText, 'user');
         userInput.value = '';
 
-        // Generate and display bot response
         setTimeout(() => {
-            const botResponse = markovChain.predictUntil(messageText);
+            const botResponse = markovChain.predictUntil(messageText.toLowerCase());
             console.log(botResponse);
             addMessage(messageText + (botResponse), 'bot');
-        }); // Simulate typing delay
+        });
     }
 });
 
 
-// Main execution block, runs when the page is fully loaded
 document.addEventListener('DOMContentLoaded', async () => {
     markovChain = await loadModel();
 
