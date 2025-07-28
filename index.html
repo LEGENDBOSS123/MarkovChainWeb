@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markov Chain Chat Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="chat-container">
+        <header>
+            <h1>Markov Chatbot</h1>
+            <p id="status">Loading model... Might take a few minutes...</p>
+        </header>
+        <div id="message-window">
+            </div>
+        <form id="input-form">
+            <input type="text" id="user-input" placeholder="Type a message..." autocomplete="off" disabled>
+            <button type="submit" id="send-button" disabled>Send</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
